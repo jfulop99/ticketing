@@ -1,0 +1,24 @@
+POST http://localhost:8081/api/ticketing/group
+Content-Type: application/json
+
+{
+  "group": "Teszt"
+}
+
+###
+GET http://localhost:8081/api/ticketing/group
+Accept: application/json
+
+###
+GET http://localhost:8081/api/ticketing/group/16
+Accept: application/json
+
+###
+PUT http://localhost:8081/api/ticketing/group/13
+Content-Type: application/json
+
+{
+  "group": "ReTeszt"
+}
+
+###
