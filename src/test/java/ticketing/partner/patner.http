@@ -1,0 +1,19 @@
+POST http://localhost:8081/api/ticketing/partner
+Content-Type: application/json
+
+{
+  "name": "Hotel Four Seasons Budapest",
+  "accountingId": "0026",
+  "address": {
+    "zip": "H-1051",
+    "city": "Budapest",
+    "addressLine1": "Szécheny tér",
+    "addressLine2": null
+  }
+}
+
+###
+GET http://localhost:8081/api/ticketing/partner
+Accept: application/json
+
+###
