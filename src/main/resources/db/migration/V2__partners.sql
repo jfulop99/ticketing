@@ -8,5 +8,3 @@ create table partners (
                                address_line2 varchar(255),
                                primary key (id)
 );
-
-insert into ticket_groups (ticket_group) values ('TV');
