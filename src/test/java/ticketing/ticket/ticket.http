@@ -1,0 +1,22 @@
+GET http://localhost:8081/api/ticketing
+Accept: application/json
+
+###
+GET http://localhost:8081/api/ticketing/25
+Accept: application/json
+
+###
+POST http://localhost:8081/api/ticketing
+Content-Type: application/json
+
+{
+  "dateOfNotification": "2021-08-01",
+  "dateOfCompletion": "2021-08-01",
+  "partnerId": 1,
+  "description": "string",
+  "ticketGroupId": 1,
+  "descriptionOfSolution": "string",
+  "workHours": 0,
+  "reportId": "string"
+}
+###

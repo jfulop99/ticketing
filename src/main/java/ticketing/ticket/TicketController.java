@@ -11,12 +11,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ticketing")
+@RequestMapping("/api/tickets")
 @Tag(name = "Operations on tickets")
 @AllArgsConstructor
 public class TicketController {
 
-    private TicketService ticketService;
+    private final TicketService ticketService;
 
     @PostMapping
     @Operation(description = "Create a ticket")
@@ -30,6 +30,24 @@ public class TicketController {
     @Operation(description = "Get all tickets")
     public List<TicketDto> findAllTickets(){
         return ticketService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(description = "Get a ticket by id")
+    public TicketDto getTicketById(@PathVariable Long id){
+        return ticketService.getTicketById(id);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(description = "Update a ticket")
+    public TicketDto updateTicketById(@PathVariable Long id, @Valid @RequestBody updateTicketCommand command){
+        return ticketService.updateTicket(id, command);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(description = "Delete ticket by id")
+    public void deleteTicketById(@PathVariable Long id){
+        ticketService.deleteTicketById(id);
     }
 
 }

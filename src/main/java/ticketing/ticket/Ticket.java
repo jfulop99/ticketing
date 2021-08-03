@@ -24,14 +24,12 @@ public class Ticket {
 
     private LocalDate dateOfCompletion;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "partner_id", referencedColumnName = "id")
+    @OneToOne(targetEntity = Partner.class)
     private Partner partner;
 
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ticket_group_id", referencedColumnName = "id")
+    @OneToOne(targetEntity = TicketGroup.class)
     private TicketGroup ticketGroup;
 
     @Column(name = "desc_solution")

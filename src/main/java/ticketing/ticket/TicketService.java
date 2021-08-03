@@ -3,8 +3,9 @@ package ticketing.ticket;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import ticketing.partner.Partner;
 import ticketing.partner.PartnerRepository;
+import ticketing.ticketgroup.TicketGroup;
 import ticketing.ticketgroup.TicketGroupRepository;
 
 import java.util.List;
@@ -23,11 +24,13 @@ public class TicketService {
     private final ModelMapper modelMapper;
 
     public TicketDto createTicket(createTicketCommand command) {
-        Ticket ticket = new Ticket(command.getDateOfCompletion(), partnerRepository.getById(command.getPartnerId()), command.getDescription(),
-                ticketGroupRepository.getById(command.getTicketGroupId()), command.getDescriptionOfSolution(), command.getWorkHours(), command.getReportId());
-        ticketRepository.save(ticket);
-        Ticket saved = ticketRepository.findById(ticket.getId()).orElseThrow();
-        return modelMapper.map(saved, TicketDto.class);
+        Partner partner = partnerRepository.getById(command.getPartnerId());
+        TicketGroup ticketGroup = ticketGroupRepository.getById(command.getTicketGroupId());
+
+        Ticket ticket = new Ticket(command.getDateOfCompletion(), partner, command.getDescription(),
+                ticketGroup, command.getDescriptionOfSolution(), command.getWorkHours(), command.getReportId());
+        ticketRepository.saveAndFlush(ticket);
+        return modelMapper.map(ticket, TicketDto.class);
     }
 
     public List<TicketDto> findAll() {
@@ -35,5 +38,24 @@ public class TicketService {
                 .stream()
                 .map(ticket -> modelMapper.map(ticket, TicketDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public TicketDto getTicketById(Long id) {
+        return modelMapper.map(ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find ticket")), TicketDto.class);
+    }
+
+    public TicketDto updateTicket(Long id, updateTicketCommand command) {
+        Ticket ticket = ticketRepository.getById(id);
+        ticket.setDateOfCompletion(command.getDateOfCompletion());
+        ticket.setDescription(command.getDescription());
+        ticket.setDescriptionOfSolution(command.getDescriptionOfSolution());
+        ticket.setWorkHours(command.getWorkHours());
+        ticket.setReportId(command.getReportId());
+        ticketRepository.save(ticket);
+        return modelMapper.map(ticket, TicketDto.class);
+    }
+
+    public void deleteTicketById(Long id) {
+        ticketRepository.deleteById(id);
     }
 }
