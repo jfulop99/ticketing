@@ -1,20 +1,128 @@
 package ticketing.ticket;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.jdbc.Sql;
+import org.zalando.problem.Problem;
+import ticketing.partner.*;
+import ticketing.ticketgroup.TicketGroupDto;
+import ticketing.ticketgroup.TicketGroupService;
+import ticketing.ticketgroup.createTicketGroupCommand;
+import ticketing.ticketgroup.updateGroupCommand;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(statements ={"delete  from tickets",  "delete from ticket_groups", "delete from partners"})
 class TicketControllerIT {
 
+    @Autowired
+    TestRestTemplate template;
+
+    @Autowired
+    PartnerService partnerService;
+
+    @Autowired
+    TicketGroupService ticketGroupService;
+
     @Test
-    void createTicket() {
+    void createTicketTest() {
+
+        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+
+        TicketDto ticket = template
+            .postForObject("/api/tickets/",
+                new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                        ticketGroup.getId(), null, 0, null),
+                TicketDto.class);
+        assertEquals("Not working", ticket.getDescription());
+
+
     }
 
     @Test
-    void findAllTickets() {
+    void findAllTicketsTest() {
+        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+
+        TicketDto ticket = template
+                .postForObject("/api/tickets/",
+                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                                ticketGroup.getId(), null, 0, null),
+                        TicketDto.class);
+
+        List<TicketDto> tickets = template.exchange
+                ("/api/tickets",
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<TicketDto>>() {
+                        }).getBody();
+
+        assertThat(tickets).hasSize(1)
+                .extracting(TicketDto::getDescription)
+                .containsExactly("Not Working");
+
+    }
+
+    @Test
+    void updateTicketTest(){
+
+        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+
+        TicketDto ticket = template
+                .postForObject("/api/tickets/",
+                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                                ticketGroup.getId(), null, 0, null),
+                        TicketDto.class);
+
+        Long id = ticket.getId();
+
+        template.put(String.format("/api/tickets/%d", id), new updateTicketCommand(null, "Not Working too", null, 0, null));
+
+        ticket = template
+                .getForObject(String.format("/api/tickets/%d", id), TicketDto.class);
+
+        assertEquals("Not Working too", ticket.getDescription());
+
+    }
+
+    @Test
+    void deleteTicketTest(){
+
+        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+
+        TicketDto ticket = template
+                .postForObject("/api/tickets/",
+                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                                ticketGroup.getId(), null, 0, null),
+                        TicketDto.class);
+
+        Long id = ticket.getId();
+
+        template.delete(String.format("/api/tickets/%d", id));
+
+        Problem problem = template.getForObject(String.format("/api/tickets/%d", id), Problem.class);
+        assertEquals("500 Internal Server Error", problem.getStatus().toString());
+        assertEquals("Cannot find ticket", problem.getDetail());
+
     }
 }

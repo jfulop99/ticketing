@@ -19,19 +19,19 @@ public class PartnerController {
     private final PartnerService partnerService;
 
     @GetMapping
-    @Operation(description = "Get all partners")
+    @Operation(summary = "Get all partners")
     public List<PartnerDto> findAllPartners(){
         return partnerService.findAllPartners();
     }
 
     @GetMapping("/{id}")
-    @Operation(description = "Find partner by id")
+    @Operation(summary = "Find partner by id")
     public PartnerDto findPartnerById(@PathVariable Long id){
         return partnerService.findPartnerById(id);
     }
 
     @PostMapping
-    @Operation(description = "Create a partner")
+    @Operation(summary = "Create a partner")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Partner has been created")
     public PartnerDto createPartner(@Valid @RequestBody createPartnerCommand command){
@@ -39,13 +39,13 @@ public class PartnerController {
     }
 
     @PutMapping("/{id}")
-    @Operation(description = "Update a partner by id")
+    @Operation(summary = "Update a partner by id")
     public PartnerDto updatePartnerById(@PathVariable Long id, @Valid @RequestBody updatePartnerCommand command){
         return partnerService.updatePartnerById(id, command);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(description = "Delete a partner by id")
+    @Operation(summary = "Delete a partner by id")
     public void deletePartnerById(@PathVariable Long id){
         partnerService.deletePartnerById(id);
     }

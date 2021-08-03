@@ -19,7 +19,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    @Operation(description = "Create a ticket")
+    @Operation(summary = "Create a ticket")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Ticket has been created")
     public TicketDto createTicket(@Valid @RequestBody createTicketCommand command){
@@ -27,25 +27,25 @@ public class TicketController {
     }
 
     @GetMapping
-    @Operation(description = "Get all tickets")
+    @Operation(summary = "Get all tickets")
     public List<TicketDto> findAllTickets(){
         return ticketService.findAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(description = "Get a ticket by id")
+    @Operation(summary = "Get a ticket by id")
     public TicketDto getTicketById(@PathVariable Long id){
         return ticketService.getTicketById(id);
     }
 
     @PutMapping("/{id}")
-    @Operation(description = "Update a ticket")
+    @Operation(summary = "Update a ticket")
     public TicketDto updateTicketById(@PathVariable Long id, @Valid @RequestBody updateTicketCommand command){
         return ticketService.updateTicket(id, command);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(description = "Delete ticket by id")
+    @Operation(summary = "Delete ticket by id")
     public void deleteTicketById(@PathVariable Long id){
         ticketService.deleteTicketById(id);
     }
