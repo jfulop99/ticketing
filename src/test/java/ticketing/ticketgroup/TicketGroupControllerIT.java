@@ -26,7 +26,7 @@ class TicketGroupControllerIT {
     void createGroup() {
         TicketGroupDto group = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("HeadEnd"),
+                        new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
         assertEquals("HeadEnd", group.getGroup());
 
@@ -36,7 +36,7 @@ class TicketGroupControllerIT {
     void getGroups() {
         TicketGroupDto group = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("HeadEnd"),
+                        new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
 
@@ -56,12 +56,12 @@ class TicketGroupControllerIT {
     void updateGroupById() {
         TicketGroupDto group = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("HeadEnd"),
+                        new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
 
-        template.put(String.format("/api/tickets/groups/%d", id), new updateGroupCommand("Fejállomás"));
+        template.put(String.format("/api/tickets/groups/%d", id), new UpdateGroupCommand("Fejállomás"));
 
         group = template
                 .getForObject(String.format("/api/tickets/groups/%d", id), TicketGroupDto.class);
@@ -73,7 +73,7 @@ class TicketGroupControllerIT {
     void deleteGroupById() {
         TicketGroupDto group = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("HeadEnd"),
+                        new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
@@ -89,7 +89,7 @@ class TicketGroupControllerIT {
     void createGroupNotValidTest() {
         Problem problem = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("T"),
+                        new CreateTicketGroupCommand("T"),
                         Problem.class);
         assertEquals(Status.BAD_REQUEST, problem.getStatus());
 
@@ -99,7 +99,7 @@ class TicketGroupControllerIT {
     void updateGroupNotValidTest() {
         TicketGroupDto group = template
                 .postForObject("/api/tickets/groups",
-                        new createTicketGroupCommand("HeadEnd"),
+                        new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
@@ -107,7 +107,7 @@ class TicketGroupControllerIT {
         Problem problem = template
                 .exchange(String.format("/api/tickets/groups/%d", id),
                         HttpMethod.PUT,
-                        new HttpEntity<>(new updateGroupCommand("T")),
+                        new HttpEntity<>(new UpdateGroupCommand("T")),
                         Problem.class).getBody();
         assert problem != null;
         assertEquals(Status.BAD_REQUEST, problem.getStatus());

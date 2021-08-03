@@ -11,8 +11,7 @@ import org.zalando.problem.Problem;
 import ticketing.partner.*;
 import ticketing.ticketgroup.TicketGroupDto;
 import ticketing.ticketgroup.TicketGroupService;
-import ticketing.ticketgroup.createTicketGroupCommand;
-import ticketing.ticketgroup.updateGroupCommand;
+import ticketing.ticketgroup.CreateTicketGroupCommand;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,14 +35,14 @@ class TicketControllerIT {
     @Test
     void createTicketTest() {
 
-        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
-        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
 
         TicketDto ticket = template
             .postForObject("/api/tickets/",
-                new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                new CreateTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
                         ticketGroup.getId(), null, 0, null),
                 TicketDto.class);
         assertEquals("Not working", ticket.getDescription());
@@ -53,14 +52,14 @@ class TicketControllerIT {
 
     @Test
     void findAllTicketsTest() {
-        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
-        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
 
         TicketDto ticket = template
                 .postForObject("/api/tickets/",
-                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                        new CreateTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
                                 ticketGroup.getId(), null, 0, null),
                         TicketDto.class);
 
@@ -73,27 +72,27 @@ class TicketControllerIT {
 
         assertThat(tickets).hasSize(1)
                 .extracting(TicketDto::getDescription)
-                .containsExactly("Not Working");
+                .containsExactly("Not working");
 
     }
 
     @Test
     void updateTicketTest(){
 
-        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
-        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
 
         TicketDto ticket = template
                 .postForObject("/api/tickets/",
-                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                        new CreateTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
                                 ticketGroup.getId(), null, 0, null),
                         TicketDto.class);
 
         Long id = ticket.getId();
 
-        template.put(String.format("/api/tickets/%d", id), new updateTicketCommand(null, "Not Working too", null, 0, null));
+        template.put(String.format("/api/tickets/%d", id), new UpdateTicketCommand(null, "Not Working too", null, 0, null));
 
         ticket = template
                 .getForObject(String.format("/api/tickets/%d", id), TicketDto.class);
@@ -105,14 +104,14 @@ class TicketControllerIT {
     @Test
     void deleteTicketTest(){
 
-        PartnerDto partner = partnerService.createPartner(new createPartnerCommand("Hotel Intercontinental", "0025",
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
-        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new createTicketGroupCommand("HeadEnd"));
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
 
         TicketDto ticket = template
                 .postForObject("/api/tickets/",
-                        new createTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                        new CreateTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
                                 ticketGroup.getId(), null, 0, null),
                         TicketDto.class);
 

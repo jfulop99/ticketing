@@ -26,11 +26,11 @@ class PartnerControllerIT {
     void findAllPartnersTest() {
 
         template.postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "0025",
+                        new CreatePartnerCommand("Hotel Intercontinental", "0025",
                                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         template.postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Four Seasons Budapest", "0026",
+                        new CreatePartnerCommand("Four Seasons Budapest", "0026",
                                 new Address("H-1051", "Budapest", "Szécheny tér 3.", null)),
                         PartnerDto.class);
 
@@ -52,7 +52,7 @@ class PartnerControllerIT {
     void findPartnerByIdTest() {
         PartnerDto partner = template
                 .postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "0025",
+                        new CreatePartnerCommand("Hotel Intercontinental", "0025",
                                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
@@ -70,7 +70,7 @@ class PartnerControllerIT {
     void createPartnerTest() {
         PartnerDto partner = template
                 .postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
+                        new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         assertEquals("Hotel Intercontinental", partner.getName());
 
@@ -80,12 +80,12 @@ class PartnerControllerIT {
     void updatePartnerByIdTest() {
         PartnerDto partner = template
                 .postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
+                        new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
 
         template.put(String.format("/api/tickets/partners/%d", id),
-                new updatePartnerCommand("Hotel Intercontinental Budapest", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+                new UpdatePartnerCommand("Hotel Intercontinental Budapest", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
         partner = template
                 .getForObject(String.format("/api/tickets/partners/%d", id), PartnerDto.class);
@@ -98,7 +98,7 @@ class PartnerControllerIT {
     void deletePartnerByIdTest() {
         PartnerDto partner = template
                 .postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
+                        new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
 
@@ -114,7 +114,7 @@ class PartnerControllerIT {
     void createPartnerNotValidTest() {
         Problem problem = template
                 .postForObject("/api/tickets/partners",
-                        new createPartnerCommand("Hotel Intercontinental", "", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
+                        new CreatePartnerCommand("Hotel Intercontinental", "", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         Problem.class);
         assertEquals(Status.BAD_REQUEST, problem.getStatus());
 
