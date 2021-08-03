@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ticketing.material.CreateMaterialCommand;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -48,6 +49,12 @@ public class TicketController {
     @Operation(summary = "Delete ticket by id")
     public void deleteTicketById(@PathVariable Long id){
         ticketService.deleteTicketById(id);
+    }
+
+    @PostMapping("/{id}/materials")
+    @Operation(summary = "Add a material to ticket by id")
+    public TicketDto addMaterialToTicket(@PathVariable Long id, @Valid @RequestBody CreateMaterialCommand command){
+        return ticketService.addMaterialToTicket(id, command);
     }
 
 }

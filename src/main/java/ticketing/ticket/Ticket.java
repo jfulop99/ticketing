@@ -1,13 +1,14 @@
 package ticketing.ticket;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ticketing.material.Material;
 import ticketing.partner.Partner;
 import ticketing.ticketgroup.TicketGroup;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -39,6 +40,9 @@ public class Ticket {
 
     private String reportId;
 
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<Material> materials;
+
     public Ticket(LocalDate dateOfCompletion, Partner partner, String description, TicketGroup ticketGroup, String descriptionOfSolution, int workHours, String reportId) {
         this.dateOfCompletion = dateOfCompletion;
         this.partner = partner;
@@ -47,5 +51,13 @@ public class Ticket {
         this.descriptionOfSolution = descriptionOfSolution;
         this.workHours = workHours;
         this.reportId = reportId;
+    }
+
+    public void addMaterial(Material material){
+        if(materials == null){
+            materials = new ArrayList<>();
+        }
+        materials.add(material);
+        material.setTicket(this);
     }
 }

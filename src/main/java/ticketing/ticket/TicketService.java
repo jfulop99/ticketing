@@ -3,6 +3,9 @@ package ticketing.ticket;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ticketing.material.CreateMaterialCommand;
+import ticketing.material.Material;
 import ticketing.partner.Partner;
 import ticketing.partner.PartnerRepository;
 import ticketing.ticketgroup.TicketGroup;
@@ -41,7 +44,11 @@ public class TicketService {
     }
 
     public TicketDto getTicketById(Long id) {
-        return modelMapper.map(ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find ticket")), TicketDto.class);
+        return modelMapper.map(findTicketById(id), TicketDto.class);
+    }
+
+    private Ticket findTicketById(Long id) {
+        return ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find ticket"));
     }
 
     public TicketDto updateTicket(Long id, UpdateTicketCommand command) {
@@ -57,5 +64,13 @@ public class TicketService {
 
     public void deleteTicketById(Long id) {
         ticketRepository.deleteById(id);
+    }
+
+    @Transactional
+    public TicketDto addMaterialToTicket(Long id, CreateMaterialCommand command) {
+        Ticket ticket = findTicketById(id);
+        Material material = new Material(command.getName(), command.getPrice());
+        ticket.addMaterial(material);
+        return modelMapper.map(ticket, TicketDto.class);
     }
 }

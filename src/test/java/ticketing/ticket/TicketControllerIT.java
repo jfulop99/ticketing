@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.jdbc.Sql;
 import org.zalando.problem.Problem;
+import ticketing.material.CreateMaterialCommand;
 import ticketing.partner.*;
 import ticketing.ticketgroup.TicketGroupDto;
 import ticketing.ticketgroup.TicketGroupService;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(statements ={"delete  from tickets",  "delete from ticket_groups", "delete from partners"})
+@Sql(statements ={"delete from tickets",  "delete from ticket_groups", "delete from partners"})
 class TicketControllerIT {
 
     @Autowired
@@ -123,5 +124,27 @@ class TicketControllerIT {
         assertEquals("500 Internal Server Error", problem.getStatus().toString());
         assertEquals("Cannot find ticket", problem.getDetail());
 
+    }
+
+    @Test
+    void addMaterialTest(){
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
+
+        TicketDto ticket = template
+                .postForObject("/api/tickets/",
+                        new CreateTicketCommand(LocalDate.now(), null, partner.getId(), "Not working",
+                                ticketGroup.getId(), null, 0, null),
+                        TicketDto.class);
+
+        Long id = ticket.getId();
+
+        TicketDto anotherTicket = template
+                .postForObject("/api/tickets/" + id + "/materials",
+                        new CreateMaterialCommand("55HFL6014", 250000), TicketDto.class);
+
+        assertEquals("55HFL6014", anotherTicket.getMaterials().get(0).getName());
     }
 }

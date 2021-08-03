@@ -3,11 +3,12 @@ package ticketing.ticket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ticketing.material.Material;
 import ticketing.partner.Partner;
 import ticketing.ticketgroup.TicketGroup;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +32,7 @@ public class TicketDto {
     private int workHours;
 
     private String reportId;
+
+    private List<Material> materials;
 
 }
