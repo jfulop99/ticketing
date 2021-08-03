@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ticketing/partner")
+@RequestMapping("/api/tickets/partners")
 @Tag(name = "Operations on partners")
 @AllArgsConstructor
 public class PartnerController {

@@ -1,4 +1,4 @@
-POST http://localhost:8081/api/ticketing/partner
+POST http://localhost:8081/api/tickets/partners
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8081/api/ticketing/partner
+GET http://localhost:8081/api/tickets/partners
 Accept: application/json
 
 ###

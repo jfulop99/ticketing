@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/ticketing/group")
+@RequestMapping("api/tickets/groups")
 @Tag(name = "Operations on groups")
 @AllArgsConstructor
 public class TicketGroupController {
