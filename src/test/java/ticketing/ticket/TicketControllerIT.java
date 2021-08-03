@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(statements ={"delete from tickets",  "delete from ticket_groups", "delete from partners"})
+@Sql(statements ={"delete from materials","delete from tickets",  "delete from ticket_groups", "delete from partners"})
 class TicketControllerIT {
 
     @Autowired
