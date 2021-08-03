@@ -31,13 +31,13 @@ public class PartnerService {
                 .findById(id).orElseThrow(() -> new PartnerNotFoundException("Cannot find partner id = " + id));
     }
 
-    public PartnerDto createPartner(createPartnerCommand command) {
+    public PartnerDto createPartner(CreatePartnerCommand command) {
         Partner partner = new Partner(command.getName(), command.getAccountingId(), command.getAddress());
         partnerRepository.save(partner);
         return modelMapper.map(partner, PartnerDto.class);
     }
 
-    public PartnerDto updatePartnerById(Long id, updatePartnerCommand command) {
+    public PartnerDto updatePartnerById(Long id, UpdatePartnerCommand command) {
         Partner partner = getPartnerById(id);
         partner.setName(command.getName());
         partner.setAccountingId(command.getAccountingId());

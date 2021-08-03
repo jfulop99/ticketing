@@ -16,7 +16,7 @@ public class TicketGroupService {
     private final ModelMapper modelMapper;
 
 
-    public TicketGroupDto createGroup(createTicketGroupCommand command) {
+    public TicketGroupDto createGroup(CreateTicketGroupCommand command) {
 
         TicketGroup ticketGroup = new TicketGroup(command.getGroup());
 
@@ -32,7 +32,7 @@ public class TicketGroupService {
                 .collect(Collectors.toList());
     }
 
-    public TicketGroupDto updateGroupById(Long id, updateGroupCommand command) {
+    public TicketGroupDto updateGroupById(Long id, UpdateGroupCommand command) {
         TicketGroup ticketGroup = findTicketGroupById(id);
         ticketGroup.setGroup(command.getGroup());
         ticketGroupRepository.save(ticketGroup);

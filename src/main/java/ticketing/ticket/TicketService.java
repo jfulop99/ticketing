@@ -23,7 +23,7 @@ public class TicketService {
 
     private final ModelMapper modelMapper;
 
-    public TicketDto createTicket(createTicketCommand command) {
+    public TicketDto createTicket(CreateTicketCommand command) {
         Partner partner = partnerRepository.getById(command.getPartnerId());
         TicketGroup ticketGroup = ticketGroupRepository.getById(command.getTicketGroupId());
 
@@ -44,7 +44,7 @@ public class TicketService {
         return modelMapper.map(ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find ticket")), TicketDto.class);
     }
 
-    public TicketDto updateTicket(Long id, updateTicketCommand command) {
+    public TicketDto updateTicket(Long id, UpdateTicketCommand command) {
         Ticket ticket = ticketRepository.getById(id);
         ticket.setDateOfCompletion(command.getDateOfCompletion());
         ticket.setDescription(command.getDescription());

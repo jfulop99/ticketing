@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class updatePartnerCommand {
+public class UpdatePartnerCommand {
 
     @NotNull
     @NotBlank

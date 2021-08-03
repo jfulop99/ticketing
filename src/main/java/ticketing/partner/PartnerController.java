@@ -34,13 +34,13 @@ public class PartnerController {
     @Operation(summary = "Create a partner")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Partner has been created")
-    public PartnerDto createPartner(@Valid @RequestBody createPartnerCommand command){
+    public PartnerDto createPartner(@Valid @RequestBody CreatePartnerCommand command){
         return partnerService.createPartner(command);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a partner by id")
-    public PartnerDto updatePartnerById(@PathVariable Long id, @Valid @RequestBody updatePartnerCommand command){
+    public PartnerDto updatePartnerById(@PathVariable Long id, @Valid @RequestBody UpdatePartnerCommand command){
         return partnerService.updatePartnerById(id, command);
     }
 

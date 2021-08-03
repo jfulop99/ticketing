@@ -22,7 +22,7 @@ public class TicketGroupController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a group")
     @ApiResponse(responseCode = "201", description = "Group has been created")
-    public TicketGroupDto createGroup(@Valid @RequestBody createTicketGroupCommand command){
+    public TicketGroupDto createGroup(@Valid @RequestBody CreateTicketGroupCommand command){
         return ticketGroupService.createGroup(command);
     }
 
@@ -40,7 +40,7 @@ public class TicketGroupController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a group by id")
-    public TicketGroupDto updateGroupById(@PathVariable Long id, @Valid @RequestBody updateGroupCommand command){
+    public TicketGroupDto updateGroupById(@PathVariable Long id, @Valid @RequestBody UpdateGroupCommand command){
         return ticketGroupService.updateGroupById(id, command);
     }
 

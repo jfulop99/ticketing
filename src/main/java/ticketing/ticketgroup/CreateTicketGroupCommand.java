@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class createTicketGroupCommand {
+public class CreateTicketGroupCommand {
 
     @NotNull
     @NotBlank

@@ -22,7 +22,7 @@ public class TicketController {
     @Operation(summary = "Create a ticket")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Ticket has been created")
-    public TicketDto createTicket(@Valid @RequestBody createTicketCommand command){
+    public TicketDto createTicket(@Valid @RequestBody CreateTicketCommand command){
         return ticketService.createTicket(command);
     }
 
@@ -40,7 +40,7 @@ public class TicketController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a ticket")
-    public TicketDto updateTicketById(@PathVariable Long id, @Valid @RequestBody updateTicketCommand command){
+    public TicketDto updateTicketById(@PathVariable Long id, @Valid @RequestBody UpdateTicketCommand command){
         return ticketService.updateTicket(id, command);
     }
 

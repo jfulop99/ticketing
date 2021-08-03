@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class updateGroupCommand {
+public class UpdateGroupCommand {
     @NotNull
     @NotBlank
     @Length(max = 25, min = 2)
