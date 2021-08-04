@@ -25,7 +25,7 @@ class TicketGroupControllerIT {
     @Test
     void createGroup() {
         TicketGroupDto group = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
         assertEquals("HeadEnd", group.getGroup());
@@ -35,13 +35,13 @@ class TicketGroupControllerIT {
     @Test
     void getGroups() {
         TicketGroupDto group = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
 
         List<TicketGroupDto> groups = template.exchange
-                ("/api/tickets/groups",
+                ("/api/groups",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<TicketGroupDto>>() {
@@ -55,16 +55,16 @@ class TicketGroupControllerIT {
     @Test
     void updateGroupById() {
         TicketGroupDto group = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
 
-        template.put(String.format("/api/tickets/groups/%d", id), new UpdateGroupCommand("Fejállomás"));
+        template.put(String.format("/api/groups/%d", id), new UpdateGroupCommand("Fejállomás"));
 
         group = template
-                .getForObject(String.format("/api/tickets/groups/%d", id), TicketGroupDto.class);
+                .getForObject(String.format("/api/groups/%d", id), TicketGroupDto.class);
 
         assertEquals("Fejállomás", group.getGroup());
     }
@@ -72,15 +72,15 @@ class TicketGroupControllerIT {
     @Test
     void deleteGroupById() {
         TicketGroupDto group = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
 
-        template.delete(String.format("/api/tickets/groups/%d", id));
+        template.delete(String.format("/api/groups/%d", id));
 
-        Problem problem = template.getForObject(String.format("/api/tickets/groups/%d", id), Problem.class);
+        Problem problem = template.getForObject(String.format("/api/groups/%d", id), Problem.class);
         assertEquals("500 Internal Server Error", problem.getStatus().toString());
         assertEquals(String.format("Cannot find group id = %d", id), problem.getDetail());
     }
@@ -88,7 +88,7 @@ class TicketGroupControllerIT {
     @Test
     void createGroupNotValidTest() {
         Problem problem = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("T"),
                         Problem.class);
         assertEquals(Status.BAD_REQUEST, problem.getStatus());
@@ -98,14 +98,14 @@ class TicketGroupControllerIT {
     @Test
     void updateGroupNotValidTest() {
         TicketGroupDto group = template
-                .postForObject("/api/tickets/groups",
+                .postForObject("/api/groups",
                         new CreateTicketGroupCommand("HeadEnd"),
                         TicketGroupDto.class);
 
         Long id = group.getId();
 
         Problem problem = template
-                .exchange(String.format("/api/tickets/groups/%d", id),
+                .exchange(String.format("/api/groups/%d", id),
                         HttpMethod.PUT,
                         new HttpEntity<>(new UpdateGroupCommand("T")),
                         Problem.class).getBody();

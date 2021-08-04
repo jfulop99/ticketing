@@ -25,18 +25,18 @@ class PartnerControllerIT {
     @Test
     void findAllPartnersTest() {
 
-        template.postForObject("/api/tickets/partners",
+        template.postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "0025",
                                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
-        template.postForObject("/api/tickets/partners",
+        template.postForObject("/api/partners",
                         new CreatePartnerCommand("Four Seasons Budapest", "0026",
                                 new Address("H-1051", "Budapest", "Szécheny tér 3.", null)),
                         PartnerDto.class);
 
 
         List<PartnerDto> partners = template.exchange
-                ("/api/tickets/partners",
+                ("/api/partners",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<PartnerDto>>() {
@@ -51,14 +51,14 @@ class PartnerControllerIT {
     @Test
     void findPartnerByIdTest() {
         PartnerDto partner = template
-                .postForObject("/api/tickets/partners",
+                .postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "0025",
                                 new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
 
         partner = template
-                .getForObject(String.format("/api/tickets/partners/%d", id), PartnerDto.class);
+                .getForObject(String.format("/api/partners/%d", id), PartnerDto.class);
 
 
         assertEquals("Hotel Intercontinental", partner.getName());
@@ -69,7 +69,7 @@ class PartnerControllerIT {
     @Test
     void createPartnerTest() {
         PartnerDto partner = template
-                .postForObject("/api/tickets/partners",
+                .postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         assertEquals("Hotel Intercontinental", partner.getName());
@@ -79,16 +79,16 @@ class PartnerControllerIT {
     @Test
     void updatePartnerByIdTest() {
         PartnerDto partner = template
-                .postForObject("/api/tickets/partners",
+                .postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
 
-        template.put(String.format("/api/tickets/partners/%d", id),
+        template.put(String.format("/api/partners/%d", id),
                 new UpdatePartnerCommand("Hotel Intercontinental Budapest", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
 
         partner = template
-                .getForObject(String.format("/api/tickets/partners/%d", id), PartnerDto.class);
+                .getForObject(String.format("/api/partners/%d", id), PartnerDto.class);
 
 
         assertEquals("Hotel Intercontinental Budapest", partner.getName());
@@ -97,14 +97,14 @@ class PartnerControllerIT {
     @Test
     void deletePartnerByIdTest() {
         PartnerDto partner = template
-                .postForObject("/api/tickets/partners",
+                .postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "0025", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         PartnerDto.class);
         Long id = partner.getId();
 
-        template.delete(String.format("/api/tickets/partners/%d", id));
+        template.delete(String.format("/api/partners/%d", id));
 
-        Problem problem = template.getForObject(String.format("/api/tickets/partners/%d", id), Problem.class);
+        Problem problem = template.getForObject(String.format("/api/partners/%d", id), Problem.class);
         assertEquals("500 Internal Server Error", problem.getStatus().toString());
         assertEquals(String.format("Cannot find partner id = %d", id), problem.getDetail());
 
@@ -113,7 +113,7 @@ class PartnerControllerIT {
     @Test
     void createPartnerNotValidTest() {
         Problem problem = template
-                .postForObject("/api/tickets/partners",
+                .postForObject("/api/partners",
                         new CreatePartnerCommand("Hotel Intercontinental", "", new Address("H-1051", "Budapest", "Szécheny tér 1.", null)),
                         Problem.class);
         assertEquals(Status.BAD_REQUEST, problem.getStatus());
