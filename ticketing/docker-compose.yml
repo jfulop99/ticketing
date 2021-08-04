@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ticketing-mariadb:
+    image: mariadb
+    restart: always
+    ports:
+      - '3316:3306'
+    environment:
+      MYSQL_DATABASE: ticketing
+      MYSQL_USER: ticketing
+      MYSQL_PASSWORD: ticketing
+      MYSQL_ROOT_PASSWORD: root
+
+  ticketing-app:
+    image: ticketing
+    restart: always
+    ports:
+      - '8085:8080'
+    depends_on:
+      - ticketing-mariadb
+    environment:
+      SERVER.PORT: 8080
+      SPRING_DATASOURCE_URL: 'jdbc:mariadb://ticketing-mariadb/ticketing'
+    entrypoint: ['./wait-for-it.sh', '-t', '120', 'ticketing-mariadb:3306', '--', 'java', 'org.springframework.boot.loader.JarLauncher']
