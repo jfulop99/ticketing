@@ -25,7 +25,7 @@ public class Material {
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     private Ticket ticket;
 
     public Material(String name, int price) {

@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ticketing.material.Material;
+import ticketing.material.MaterialDto;
 import ticketing.partner.Partner;
+import ticketing.partner.PartnerDto;
 import ticketing.ticketgroup.TicketGroup;
+import ticketing.ticketgroup.TicketGroupDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,11 +24,11 @@ public class TicketDto {
 
     private LocalDate dateOfCompletion;
 
-    private Partner partner;
+    private PartnerDto partner;
 
     private String description;
 
-    private TicketGroup ticketGroup;
+    private TicketGroupDto ticketGroup;
 
     private String descriptionOfSolution;
 
@@ -33,6 +36,6 @@ public class TicketDto {
 
     private String reportId;
 
-    private List<Material> materials;
+    private List<MaterialDto> materials;
 
 }
