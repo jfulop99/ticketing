@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
   "dateOfNotification": "2021-08-01",
-  "dateOfCompletion": "2021-08-01",
+  "dateOfCompletion": "2021-07-01",
   "partnerId": 1,
   "description": "string",
   "ticketGroupId": 1,

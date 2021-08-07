@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 import org.zalando.problem.Problem;
 import ticketing.material.CreateMaterialCommand;
@@ -147,4 +148,24 @@ class TicketControllerIT {
 
         assertEquals("55HFL6014", anotherTicket.getMaterials().get(0).getName());
     }
+
+    @Test
+    void createTicketWithWrongDateTest() {
+
+        PartnerDto partner = partnerService.createPartner(new CreatePartnerCommand("Hotel Intercontinental", "0025",
+                new Address("H-1051", "Budapest", "Szécheny tér 1.", null)));
+
+        TicketGroupDto ticketGroup = ticketGroupService.createGroup(new CreateTicketGroupCommand("HeadEnd"));
+
+        Problem problem = template
+                .postForObject("/api/tickets/",
+                        new CreateTicketCommand(LocalDate.now(), LocalDate.of(2021,1,1), partner.getId(), "Not working",
+                                ticketGroup.getId(), null, 0, null),
+                        Problem.class);
+
+        assertEquals(400, problem.getStatus().getStatusCode());
+
+
+    }
+
 }
