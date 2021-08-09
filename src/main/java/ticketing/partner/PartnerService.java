@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +18,7 @@ public class PartnerService {
         return partnerRepository.findAll()
                 .stream()
                 .map(partner -> modelMapper.map(partner, PartnerDto.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public PartnerDto findPartnerById(Long id) {

@@ -7,19 +7,18 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@CreateTicketDateValid
 public class CreateTicketCommand {
 
-    private LocalDate dateOfNotification = LocalDate.now();
-
-    private LocalDate dateOfCompletion;
+    @NotNull
+    @FulfillmentPeriodValid
+    private FulfillmentPeriod fulfillmentPeriod;
 
     @NotNull
+    @ValidPartner
     private Long partnerId;
 
     @NotNull
@@ -27,6 +26,7 @@ public class CreateTicketCommand {
     private String description;
 
     @NotNull
+    @ValidGroup
     private Long ticketGroupId;
 
     private String descriptionOfSolution;

@@ -12,7 +12,6 @@ import ticketing.ticketgroup.TicketGroup;
 import ticketing.ticketgroup.TicketGroupRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +29,7 @@ public class TicketService {
         Partner partner = partnerRepository.getById(command.getPartnerId());
         TicketGroup ticketGroup = ticketGroupRepository.getById(command.getTicketGroupId());
 
-        Ticket ticket = new Ticket(command.getDateOfCompletion(), partner, command.getDescription(),
+        Ticket ticket = new Ticket(command.getFulfillmentPeriod(), partner, command.getDescription(),
                 ticketGroup, command.getDescriptionOfSolution(), command.getWorkHours(), command.getReportId());
         ticketRepository.saveAndFlush(ticket);
         return modelMapper.map(ticket, TicketDto.class);
@@ -40,7 +39,7 @@ public class TicketService {
         return ticketRepository.findAll()
                 .stream()
                 .map(ticket -> modelMapper.map(ticket, TicketDto.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public TicketDto getTicketById(Long id) {
@@ -53,7 +52,7 @@ public class TicketService {
 
     public TicketDto updateTicket(Long id, UpdateTicketCommand command) {
         Ticket ticket = ticketRepository.getById(id);
-        ticket.setDateOfCompletion(command.getDateOfCompletion());
+        ticket.getFulfillmentPeriod().setDateOfCompletion(command.getFulfillmentPeriod().getDateOfCompletion());
         ticket.setDescription(command.getDescription());
         ticket.setDescriptionOfSolution(command.getDescriptionOfSolution());
         ticket.setWorkHours(command.getWorkHours());
@@ -72,5 +71,11 @@ public class TicketService {
         Material material = new Material(command.getName(), command.getPrice());
         ticket.addMaterial(material);
         return modelMapper.map(ticket, TicketDto.class);
+    }
+
+    @Transactional
+    public void deleteAllMaterialsFromTicket(Long id) {
+        Ticket ticket = findTicketById(id);
+        ticket.getMaterials().clear();
     }
 }

@@ -2,7 +2,7 @@ GET http://localhost:8081/api/tickets
 Accept: application/json
 
 ###
-GET http://localhost:8081/api/tickets/1
+GET http://localhost:8081/api/tickets/13
 Accept: application/json
 
 ###
@@ -10,8 +10,10 @@ POST http://localhost:8081/api/tickets
 Content-Type: application/json
 
 {
-  "dateOfNotification": "2021-08-01",
-  "dateOfCompletion": "2021-07-01",
+  "fulfillmentPeriod": {
+    "dateOfNotification": "2021-08-08",
+    "dateOfCompletion": "2021-08-09"
+  },
   "partnerId": 1,
   "description": "string",
   "ticketGroupId": 1,
@@ -20,7 +22,7 @@ Content-Type: application/json
   "reportId": "string"
 }
 ###
-POST http://localhost:8081/api/tickets/28/materials
+POST http://localhost:8081/api/tickets/8/materials
 Content-Type: application/json
 
 {
@@ -28,7 +30,11 @@ Content-Type: application/json
   "price": "125000"
 }
 ###
-DELETE http://localhost:8081/api/tickets/28
+DELETE http://localhost:8081/api/tickets/10
+Accept: application/json
+
+###
+DELETE http://localhost:8081/api/tickets/8/materials
 Accept: application/json
 
 ###

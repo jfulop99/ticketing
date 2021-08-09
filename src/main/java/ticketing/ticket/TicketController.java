@@ -57,4 +57,10 @@ public class TicketController {
         return ticketService.addMaterialToTicket(id, command);
     }
 
+    @DeleteMapping("/{id}/materials")
+    @Operation(summary = "Delete all materials from ticket by id")
+    public void deleteAllMaterialsFromTicket(@PathVariable Long id){
+        ticketService.deleteAllMaterialsFromTicket(id);
+    }
+
 }

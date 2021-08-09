@@ -74,4 +74,5 @@ Lehet listázni, lekérdezni, létrehozni, törölni, a + jelű attribútumokat 
 | PUT          | `"api/tickets/{id}"`                 | módosít egy bejelentést id alapján  |
 | DELETE       | `"api/tickets/{id}"`                 | töröl egy bejelentést id alapján    |
 | POST         | `"api/tickets/{id}/materials"`       | létrehoz egy anyagot az adott id-jű bejelentéshez            |
+| DELETE       | `"api/tickets/{id}/materials"`       | törli az összes anyagot az adott id-jű bejelentésből       |
 

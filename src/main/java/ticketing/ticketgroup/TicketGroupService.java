@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +28,7 @@ public class TicketGroupService {
         return ticketGroupRepository.findAll()
                 .stream()
                 .map(group -> modelMapper.map(group, TicketGroupDto.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public TicketGroupDto updateGroupById(Long id, UpdateGroupCommand command) {

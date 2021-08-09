@@ -27,7 +27,7 @@ public class Address {
 
     @NotNull
     @NotBlank
-    @Schema(example = "Szécheny tér")
+    @Schema(example = "Széchenyi tér")
     private String addressLine1;
 
     @Schema(example = "null")

@@ -11,10 +11,9 @@ public class PartnerValidator implements ConstraintValidator<ValidPartner, Long>
    @Autowired
    private PartnerRepository partnerRepository;
 
-   public void initialize(ValidPartner constraint) {
-   }
 
-   public boolean isValid(Long partner_id, ConstraintValidatorContext context) {
-      return partnerRepository.findById(partner_id).isPresent();
+   @Override
+   public boolean isValid(Long partnerId, ConstraintValidatorContext context) {
+      return partnerRepository.findById(partnerId).isPresent();
    }
 }

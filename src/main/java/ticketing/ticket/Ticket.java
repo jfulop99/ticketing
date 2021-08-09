@@ -1,12 +1,13 @@
 package ticketing.ticket;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ticketing.material.Material;
 import ticketing.partner.Partner;
 import ticketing.ticketgroup.TicketGroup;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,8 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate dateOfNotification = LocalDate.now();
-
-    private LocalDate dateOfCompletion;
+    @Embedded
+    private FulfillmentPeriod fulfillmentPeriod;
 
     @OneToOne(targetEntity = Partner.class)
     private Partner partner;
@@ -40,11 +40,11 @@ public class Ticket {
 
     private String reportId;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials;
 
-    public Ticket(LocalDate dateOfCompletion, Partner partner, String description, TicketGroup ticketGroup, String descriptionOfSolution, int workHours, String reportId) {
-        this.dateOfCompletion = dateOfCompletion;
+    public Ticket(FulfillmentPeriod fulfillmentPeriod, Partner partner, String description, TicketGroup ticketGroup, String descriptionOfSolution, int workHours, String reportId) {
+        this.fulfillmentPeriod = fulfillmentPeriod;
         this.partner = partner;
         this.description = description;
         this.ticketGroup = ticketGroup;

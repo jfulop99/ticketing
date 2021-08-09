@@ -1,6 +1,5 @@
 package ticketing.material;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,6 @@ public class Material {
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
-//    @JsonIgnore
     private Ticket ticket;
 
     public Material(String name, int price) {
